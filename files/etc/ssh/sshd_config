@@ -1,0 +1,9 @@
+# Files you need to ensure are present for key login
+AuthorizedKeysFile      .ssh/authorized_keys
+
+# Disable password authentication
+PasswordAuthentication no
+PermitRootLogin prohibit-password
+
+# Ensure client is included if needed for scripts
+Subsystem       sftp    /usr/lib/openssh/sftp-server
