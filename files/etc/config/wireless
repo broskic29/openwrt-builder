@@ -6,7 +6,6 @@ config wifi-iface
     option device 'radio0'
     option network 'wwan'
     option ssid 'DBATC_2_EXT'
-    option encryption 'sae'
+    option encryption 'psk2'
     option key '128521560DB'
     option mode 'sta'
-    option bssid '7C:F3:4D:E5:AE:0B'
