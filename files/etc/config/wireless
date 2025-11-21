@@ -1,0 +1,12 @@
+config wifi-device 'radio0'
+    option country 'ZM'
+    option disabled '0'
+
+config wifi-iface
+    option device 'radio0'
+    option network 'wwan'
+    option ssid 'DBATC_2_EXT'
+    option encryption 'sae'
+    option key '128521560DB'
+    option mode 'sta'
+    option bssid '7C:F3:4D:E5:AE:0B'
