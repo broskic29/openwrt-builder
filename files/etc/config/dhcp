@@ -1,5 +1,6 @@
 config dhcp 'lan'
     option interface 'lan'
+    option interface 'lan1'
     option start '100'
     option limit '300'
     option leasetime '12h'
