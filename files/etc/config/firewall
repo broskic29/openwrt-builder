@@ -8,7 +8,7 @@ config defaults
 
 config zone
     option name             lan
-    list   network          'lan'
+    list   network          'lan0'
     list   network          'lan1'
     option input            ACCEPT
     option output           ACCEPT
