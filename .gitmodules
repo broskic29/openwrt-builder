@@ -1,0 +1,3 @@
+[submodule "files/usr/lib/quota_manager"]
+	path = files/usr/lib/quota_manager
+	url = git@github.com:broskic29/quota_manager.git
