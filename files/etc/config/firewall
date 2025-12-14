@@ -10,7 +10,6 @@ config zone
     option name             lan
     list   network          'lan'
     list   network          'lan1'
-    list   network          'eth1'
     option input            ACCEPT
     option output           ACCEPT
     option forward          ACCEPT
@@ -19,8 +18,6 @@ config zone
     option name             wan
     list   network          'wan'
     list   network          'wan6'
-    list   network          'wwan'
-    list   network          'phy0-sta0'
     option input            REJECT
     option output           ACCEPT
     option forward          REJECT
