@@ -20,7 +20,7 @@ tcpdump \
 openssh-client openssh-server openssh-sftp-server \
 \
 # Python
-python3 python3-sqlite3 \
+python3 python3-pip python3-sqlite3 \
 \
 # CLI apps
 sqlite3-cli \

@@ -118,7 +118,7 @@ listen {
 	#
 	# ipv4addr = *
 	# ipv6addr = *
-	ipaddr = *
+	ipaddr = 127.0.0.1
 
 	#  Port on which to listen.
 	#  Allowed values are:
@@ -203,7 +203,7 @@ listen {
 #  port, too.
 #
 listen {
-	ipaddr = *
+	ipaddr = 127.0.0.1
 #	ipv6addr = ::
 	port = 0
 	type = acct

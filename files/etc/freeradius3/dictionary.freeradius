@@ -85,7 +85,6 @@ ATTRIBUTE   FreeRADIUS-Stats-Start-Time   176 date
 ATTRIBUTE   FreeRADIUS-Stats-HUP-Time   177 date
 
 ATTRIBUTE   FreeRADIUS-Queue-PPS-In   181 integer
-ATTRIBUTE   FreeRADIUS-Queue-PPS-In   182 integer
-
+ATTRIBUTE   FreeRADIUS-Queue-PPS-Out   182 integer
 
 END-VENDOR FreeRADIUS
