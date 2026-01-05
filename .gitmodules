@@ -1,4 +1,0 @@
-[submodule "files/usr/lib/python3.11/site-packages/quota_manager"]
-	path = files/usr/lib/python3.11/site-packages/quota_manager
-	url = git@github.com:broskic29/quota_manager.git
-	branch = develop
