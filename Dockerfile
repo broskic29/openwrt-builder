@@ -20,13 +20,19 @@ tcpdump \
 openssh-client openssh-server openssh-sftp-server \
 \
 # Python
-python3 \
+python3 python3-pip python3-sqlite3 \
+\
+# CLI apps
+sqlite3-cli \
 \
 # Docker
 docker docker-compose \
 \
 # QoS / firewall / monitoring
 luci-app-nft-qos \
+\
+# RADIUS server for AAA
+freeradius3-default freeradiuse-mod-sql-sqlite \
 \
 # Removing dropbear
 -dropbear -dropbear-openssl \
