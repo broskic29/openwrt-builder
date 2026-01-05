@@ -1,51 +1,56 @@
-table inet captive {
-	set authorized_users {
-		type ether_addr
-		flags dynamic
-	}
+set authorized_users {
+    type ether_addr
+    counter
+    flags dynamic
+}
 
-	chain input {
-		type filter hook input priority filter; policy accept;
+chain captive_input {
+    type filter hook input priority filter; policy accept;
 
-        # Allow established connections
-        ct state established,related accept
+    # Allow packets from debug wlan
+    iifname "phy0-ap0" jump input_lan
 
-        # Allow captive portal
-        tcp dport 5000 accept
+    # Allow established connections
+    ct state established,related accept
 
-        # Allow DNS to dnsmasq
-        udp dport 53 accept
-        tcp dport 53 accept
+    # Allow captive portal
+    tcp dport 5000 accept
 
-        # Allow DHCP
-        udp sport 67 udp dport 68 accept
-	}
+    # Allow DNS to dnsmasq
+    udp dport 53 accept
+    tcp dport 53 accept
 
-	chain forward {
-		type filter hook forward priority filter; policy drop;
+    # Allow DHCP
+    udp sport 67 udp dport 68 accept
+}
 
-        # Allow established connections
-        ct state established,related accept
+chain captive_forward {
+    type filter hook forward priority filter; policy drop;
 
-        # Allow authenticated users to access Internet
-		ether saddr @authorized_users return
-	}
+    # Allow packets from debug wlan
+    iifname "phy0-ap0" jump forward_lan
 
-	chain output {
-		type filter hook output priority filter; policy accept;
-	}
+    # Allow established connections
+    ct state established,related accept
 
-	chain prerouting {
-		type nat hook prerouting priority dstnat; policy accept;
+    # Allow authenticated users to access Internet
+    ether saddr @authorized_users jump forward_lan
+}
 
-        # Authenticated clients bypass portal
-		ether saddr @authorized_users return
-		
-        # Redirect HTTP directed from Archer to captive portal
-        iifname "eth1" ip daddr 192.168.3.1 tcp dport 80 redirect to :5000
-        
-        # Redirect all DNS to local dnsmasq
-        udp dport 53 redirect to :53
-        tcp dport 53 redirect to :53
-	}
+chain captive_prerouting {
+    type nat hook prerouting priority -100; policy accept;
+
+    # Allow packets from debug wlan
+    iifname "phy0-ap0" jump helper_lan
+
+    # Authenticated clients bypass portal
+    ether saddr @authorized_users jump helper_lan
+    
+    # Redirect HTTP directed from Archer to captive portal
+    iifname "eth1" tcp dport 80 redirect to :5000
+    iifname "eth1" udp dport 80 redirect to :5000
+    
+    # Redirect all DNS to local dnsmasq
+    udp dport 53 redirect to :53
+    tcp dport 53 redirect to :53
 }

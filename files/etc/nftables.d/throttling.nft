@@ -1,72 +1,20 @@
-table inet captive {
-	set authorized_users {
-		type ether_addr
-		flags dynamic
-	}
 
-	chain input {
-		type filter hook input priority filter; policy accept;
-
-        # Allow established connections
-        ct state established,related accept
-
-        # Allow captive portal
-        tcp dport 5000 accept
-
-        # Allow DNS to dnsmasq
-        udp dport 53 accept
-        tcp dport 53 accept
-
-        # Allow DHCP
-        udp sport 67 udp dport 68 accept
-	}
-
-	chain forward {
-		type filter hook forward priority filter; policy drop;
-
-        # Allow established connections
-        ct state established,related accept
-
-        # Allow authenticated users to access Internet
-		ether saddr @authorized_users return
-	}
-
-	chain output {
-		type filter hook output priority filter; policy accept;
-	}
-
-	chain prerouting {
-		type nat hook prerouting priority dstnat; policy accept;
-
-        # Authenticated clients bypass portal
-		ether saddr @authorized_users return
-		
-        # Redirect HTTP directed from Archer to captive portal
-        iifname "eth1" ip daddr 192.168.3.1 tcp dport 80 redirect to :5000
-        
-        # Redirect all DNS to local dnsmasq
-        udp dport 53 redirect to :53
-        tcp dport 53 redirect to :53
-	}
+set high_speed_users {
+	type ether_addr
+	flags dynamic
 }
-table inet throttling {
-	set high_speed_users{
-		type ether_addr
-		flags dynamic
-	}
 
-    set throttled_users {
-		type ether_addr
-		flags dynamic
-	}
+set throttled_users {
+	type ether_addr
+	flags dynamic
+}
 
-	chain forward {
-		type filter hook forward priority filter; policy accept;
+chain throttling_forward {
+	type filter hook forward priority mangle; policy accept;
 
-        # Mark all members of the high_speed_users set with 0x20
-        ether saddr @high_speed_users meta mark set 0x20
+	# Mark all members of the high_speed_users set with 0x20
+	ether saddr @high_speed_users meta mark set 0x20
 
-        # Mark all members of the throttled_users set with 0x10
-        ether saddr @throttled_users meta mark set 0x10
-	}
+	# Mark all members of the throttled_users set with 0x10
+	ether saddr @throttled_users meta mark set 0x10
 }
