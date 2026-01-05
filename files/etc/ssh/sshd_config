@@ -1,5 +1,5 @@
 # Files you need to ensure are present for key login
-AuthorizedKeysFile      /root/.ssh/authorized_keys
+AuthorizedKeysFile      .ssh/authorized_keys
 
 # Disable password authentication
 PasswordAuthentication no

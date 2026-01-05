@@ -1,16 +1,30 @@
+# 2.4 GHz AP
 config wifi-device 'radio0'
-        option type 'mac80211'
-        option path 'platform/soc/fe300000.mmcnr/mmc_host/mmc1/mmc1:0001/mmc1:0001:1'
-        option band '5g'
-        option channel '36'
-        option htmode 'VHT80'
-        option disabled '0'
-        option country 'ZM'
+    option type 'mac80211'
+    option hwmode '11g'
+    option channel '6'
+    option country 'ZM'
 
-config wifi-iface 'default_radio0'
-        option device 'radio0'
-        option network 'lan1'
-        option mode 'ap'
-        option ssid 'openwrt'
-        option encryption 'psk2'
-        option key 'chakachaka123'
+config wifi-iface
+    option device 'radio0'
+    option network 'lan'
+    option mode 'ap'
+    option ssid 'pi_wifi_24GHz'
+    option encryption 'psk2'
+    option key 'piwifi123'
+
+# 5 GHz AP (optional)
+config wifi-device 'radio1'
+    option type 'mac80211'
+    option hwmode '11a'
+    option channel '36'
+    option country 'ZM'
+
+config wifi-iface
+    option device 'radio1'
+    option network 'lan'
+    option mode 'ap'
+    option ssid 'pi_wifi_5GHz'
+    option encryption 'psk2'
+    option key 'piwifi123'
+
