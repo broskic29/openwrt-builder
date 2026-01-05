@@ -1,11 +1,13 @@
 
 set high_speed_users {
 	type ether_addr
+	counter
 	flags dynamic
 }
 
 set throttled_users {
 	type ether_addr
+	counter
 	flags dynamic
 }
 
