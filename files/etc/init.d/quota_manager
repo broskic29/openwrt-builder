@@ -1,0 +1,28 @@
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+START=95
+STOP=10
+
+APP_DIR="/overlay/quota_manager"
+PY="/overlay/quota_manager/.venv/bin/python"
+LOG_DIR="/overlay/quota_manager/logs"
+OUT_LOG="$LOG_DIR/quota_manager.out.log"
+ERR_LOG="$LOG_DIR/quota_manager.err.log"
+
+start_service() {
+  mkdir -p "$LOG_DIR"
+
+  procd_open_instance
+
+  # Wrapper so we can cd + redirect logs.
+  procd_set_param command /bin/sh -c "cd '$APP_DIR' && exec '$PY' -m quota_manager >>'$OUT_LOG' 2>>'$ERR_LOG'"
+
+  # env
+  procd_set_param env PYTHONUNBUFFERED=1
+
+  # auto-restart if it dies
+  procd_set_param respawn 3600 5 0
+
+  procd_close_instance
+}

@@ -6,7 +6,7 @@ ENV PACKAGES="\
 bash curl wget vim git openssl-util ca-certificates \
 \
 # Networking & routing
-ipset kmod-ipt-conntrack kmod-nft-nat kmod-nf-nathelper \
+ipset ip-full kmod-veth kmod-ipt-conntrack kmod-nft-nat kmod-nf-nathelper \
 kmod-usb-net kmod-usb-net-rtl8152 iptables-mod-extra \
 iptables-mod-conntrack-extra iptables-mod-quota2 \
 iptables-mod-trace \
@@ -14,13 +14,16 @@ iptables-mod-trace \
 # Services & servers
 lighttpd luci luci-app-nlbwmon nlbwmon luci-app-qos \
 sqm-scripts collectd collectd-mod-network logrotate \
-tcpdump \
+tcpdump msmtp ca-bundle\
 \
 # OpenSSH
 openssh-client openssh-server openssh-sftp-server \
 \
+# OpenSSL Legacy for RADIUS
+libopenssl-legacy \
+\
 # Python
-python3 python3-pip python3-sqlite3 \
+python3 python3-pip python3-sqlite3 python3-pyroute2\
 \
 # CLI apps
 sqlite3-cli \

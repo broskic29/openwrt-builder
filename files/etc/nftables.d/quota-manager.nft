@@ -1,0 +1,104 @@
+set authorized_users {
+    type ipv4_addr
+    counter
+    flags dynamic
+}
+
+set dropped_users {
+	type ipv4_addr
+    counter
+	flags dynamic
+}
+
+set high_speed_users {
+	type ipv4_addr
+    counter
+	flags dynamic
+}
+
+set throttled_users {
+	type ipv4_addr
+	counter
+	flags dynamic
+}
+
+chain captive_input {
+    type filter hook input priority filter - 10; policy accept;
+
+    # Always allow loopback
+    iif "lo" accept
+
+    # Allow packets from debug wlan
+    iifname "phy0-ap0" accept
+
+    # Allow established connections
+    ct state established,related accept
+
+    # Allow captive portal
+    tcp dport 5000 accept
+
+    # Allow DNS to dnsmasq
+    udp dport 53 accept
+    tcp dport 53 accept
+
+    # Allow DHCP
+    udp sport 67 udp dport 68 accept
+}
+
+chain quota_manager_forward {
+    type filter hook forward priority -200; policy drop;
+
+    # Count packets downloaded over WAN
+    iifname "eth0" counter
+
+    # Count packets uploaded over WAN
+    oifname "eth0" counter
+
+    # Allow established connections
+    ct state established,related accept
+
+    # Always allow packets from debug wlan
+    iifname "phy0-ap0" accept
+    
+    # Explicitly drop dropped_users
+    ip saddr @dropped_users drop
+    ip daddr @dropped_users drop
+
+    # Allow high_speed_users
+    ip saddr @authorized_users accept
+
+}
+
+chain captive_prerouting {
+    type nat hook prerouting priority -110; policy accept;
+
+    # Allow packets from debug wlan
+    iifname "phy0-ap0" return
+
+    # Authenticated clients bypass portal
+    ip saddr @authorized_users return
+    
+    # Redirect HTTP directed from Archer to captive portal
+    iifname "eth1" tcp dport 80 redirect to :5000
+
+    # Block HTTPS
+    iifname "eth1" tcp dport 443 reject with tcp reset
+    iifname "eth1" udp dport 443 reject
+
+    # Redirect all DNS to local dnsmasq
+    udp dport 53 redirect to :53
+    tcp dport 53 redirect to :53
+}
+
+chain quota_manager_postrouting {
+		type filter hook postrouting priority filter; policy accept;
+
+        # Count all upload from addresses in authorized_users
+        oifname "eth0" ip saddr @high_speed_users counter
+
+        # Count all downloads to addresses in authorized_users
+        iifname "eth0" ip daddr @high_speed_users counter
+
+        # In future, will have to break this up to allow throttling.
+        # Will need to run tallies off of high_speed_users AND throttled_users 
+	}
