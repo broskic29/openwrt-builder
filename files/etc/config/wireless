@@ -1,2 +1,16 @@
+config wifi-device 'radio0'
+        option type 'mac80211'
+        option path 'platform/soc/fe300000.mmcnr/mmc_host/mmc1/mmc1:0001/mmc1:0001:1'
+        option band '5g'
+        option channel '36'
+        option htmode 'VHT80'
+        option disabled '0'
+        option country 'ZM'
 
-
+config wifi-iface 'default_radio0'
+        option device 'radio0'
+        option network 'lan1'
+        option mode 'ap'
+        option ssid 'openwrt'
+        option encryption 'psk2'
+        option key 'chakachaka123'
