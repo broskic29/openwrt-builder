@@ -21,6 +21,8 @@ start_service() {
   # env
   procd_set_param env PYTHONUNBUFFERED=1
 
+  procd_set_param term_timeout 30     # <-- give Python time to clean up
+
   # auto-restart if it dies
   procd_set_param respawn 3600 5 0
 
