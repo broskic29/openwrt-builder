@@ -1,0 +1,10 @@
+#!/bin/sh
+
+chmod 700 /root/.ssh
+chmod 600 /root/.ssh/authorized_keys
+
+chmod 600 /etc/msmtprc
+
+chmod +x /etc/init.d/quota_manager
+
+exit 0

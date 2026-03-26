@@ -1,0 +1,4 @@
+[submodule "files/overlay/quota-manager"]
+	path = files/overlay/quota-manager
+	url = git@github.com:broskic29/quota-manager.git
+	branch = release/v1.0.0
